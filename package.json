@@ -1,0 +1,43 @@
+{
+  "name": "kysely-pglite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "ava"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.0",
+    "@types/node": "^18.14.6",
+    "ava": "^5.2.0",
+    "esbuild": "^0.17.11",
+    "esbuild-register": "^3.4.2",
+    "kysely": "^0.27.4",
+    "prettier": "^2.8.4",
+    "tsup": "^6.7.0",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "@electric-sql/pglite": "^0.2.0",
+    "kysely": "0.x.x"
+  }
+}
