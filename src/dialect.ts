@@ -15,7 +15,7 @@ import { PGlite } from "@electric-sql/pglite"
 import { PGliteConnection } from "connection"
 
 export class PGliteDialect implements Dialect {
-  constructor(private readonly pgLite: PGlite) {}
+  constructor(private readonly pgLite: PGlite) { }
 
   createAdapter() {
     return new PostgresAdapter()
@@ -36,18 +36,45 @@ export class PGliteDialect implements Dialect {
 
 class PGliteDriver implements Driver {
   private client: PGlite | undefined
+  /**
+   * Currently used connection.
+   * If another acquireConnection() is called the request is queued till this connection has been released.
+   */
+  private connection: PGliteConnection | undefined;
+  private queue: ((con: PGliteConnection) => void)[] = [];
 
   constructor(pgLite: PGlite) {
     this.client = pgLite
   }
 
-  async init(): Promise<void> {}
+  async init(): Promise<void> { }
 
+  // Serialize access to the connection, i.e. promise is only resolved when the last connection was released.
   async acquireConnection(): Promise<DatabaseConnection> {
     if (this.client === undefined) {
-      throw new Error("PGLite not initialized")
+      throw new Error('PGLite not initialized')
     }
-    return new PGliteConnection(this.client)
+    if (this.connection !== undefined) {
+      return new Promise((resolve) => {
+        this.queue.push(resolve);
+      });
+    }
+    this.connection = new PGliteConnection(this.client);
+    return this.connection;
+  }
+
+  async releaseConnection(connection: PGliteConnection): Promise<void> {
+    if (connection !== this.connection) {
+      throw new Error('Invalid connection');
+    }
+    const removed = this.queue.splice(0, 1);
+    const next = removed[0];
+    if (next === undefined) {
+      this.connection = undefined;
+      return;
+    }
+
+    next(this.connection);
   }
 
   async beginTransaction(
@@ -72,8 +99,6 @@ class PGliteDriver implements Driver {
   async rollbackTransaction(conn: PGliteConnection): Promise<void> {
     await conn.executeQuery(CompiledQuery.raw("rollback"))
   }
-
-  async releaseConnection(_connection: PGliteConnection): Promise<void> {}
 
   async destroy(): Promise<void> {
     this.client = undefined
