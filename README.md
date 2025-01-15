@@ -5,7 +5,7 @@
 ## Setup
 
 ```bash
-npm i kysely-pglite kysely @electric-sql/pglite
+npm i kysely-pglite-dialect kysely @electric-sql/pglite
 ```
 
 ## Usage
