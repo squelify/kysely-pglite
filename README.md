@@ -1,4 +1,4 @@
-# kysely-pglite
+# kysely-pglite-dialect
 
 [Kysely](https://github.com/koskimas/kysely) dialect for [PGlite](https://pglite.dev/).
 
