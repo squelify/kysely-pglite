@@ -1,5 +1,8 @@
 # kysely-pglite-dialect
 
+![NPM Version](https://img.shields.io/npm/v/kysely-pglite-dialect)
+[![CI](https://github.com/czeidler/kysely-pglite-dialect/actions/workflows/ci.yml/badge.svg)](https://github.com/czeidler/kysely-pglite-dialect/actions/workflows/ci.yml)
+
 [Kysely](https://github.com/koskimas/kysely) dialect for [PGlite](https://pglite.dev/).
 
 ## Setup
