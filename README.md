@@ -18,7 +18,7 @@ Init Kysely like:
 ```typescript
 import { Kysely } from "kysely"
 import { PGlite } from "@electric-sql/pglite"
-import { PGliteDialect } from "kysely-pglite"
+import { PGliteDialect } from "kysely-pglite-dialect"
 
 const db = new Kysely<{
   pglite_test_table: { id: Generated<number>; data: string }
