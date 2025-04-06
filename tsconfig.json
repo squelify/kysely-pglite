@@ -8,8 +8,8 @@
     "noEmit": true,
     "incremental": false,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "baseUrl": "./src"
