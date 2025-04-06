@@ -12,7 +12,7 @@ import {
   TransactionSettings,
 } from "kysely"
 import { PGlite } from "@electric-sql/pglite"
-import { PGliteWorker } from "@electric-sql/pglite/worker"
+import type { PGliteWorker } from "@electric-sql/pglite/worker"
 import { PGliteConnection } from "connection"
 
 export class PGliteDialect implements Dialect {

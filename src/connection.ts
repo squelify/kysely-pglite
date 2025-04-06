@@ -1,6 +1,6 @@
 import { CompiledQuery, DatabaseConnection, QueryResult } from "kysely"
 import { PGlite } from "@electric-sql/pglite"
-import { PGliteWorker } from "@electric-sql/pglite/worker"
+import type { PGliteWorker } from "@electric-sql/pglite/worker"
 
 export class PGliteConnection implements DatabaseConnection {
   private readonly client: PGlite | PGliteWorker
