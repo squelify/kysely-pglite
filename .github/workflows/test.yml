@@ -1,22 +1,30 @@
 ---
 name: Tests
+
 on:
   push:
     branches: ["*"]
   pull_request:
     branches: ["*"]
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [20]
+        node-version: [20]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.version }}
-      - name: Run tests
+          fetch-depth: 0
+
+      - name: Run actions/setup-sdk@local
+        uses: ./.github/setup-sdk
+        with:
+          nodeVersion: ${{ matrix.node-version }}
+
+      - if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
+        name: Install and Test
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --ignore-scripts
           pnpm run test
