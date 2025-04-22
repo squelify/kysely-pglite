@@ -53,7 +53,7 @@ class PGliteDriver implements Driver {
   // Serialize access to the connection, i.e. promise is only resolved when the last connection was released.
   async acquireConnection(): Promise<DatabaseConnection> {
     if (this.client === undefined) {
-      throw new Error('PGLite not initialized')
+      throw new Error('PGlite not initialized')
     }
     if (this.connection !== undefined) {
       return new Promise((resolve) => {

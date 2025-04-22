@@ -1,15 +1,30 @@
-# kysely-pglite-dialect
+# Kysely PGlite Dialect
 
-[![NPM Version](https://img.shields.io/npm/v/kysely-pglite-dialect)](https://www.npmjs.com/package/kysely-pglite-dialect)
-[![Test](https://github.com/czeidler/kysely-pglite-dialect/actions/workflows/test.yml/badge.svg)](https://github.com/czeidler/kysely-pglite-dialect/actions/workflows/test.yml)
-[![Build](https://github.com/czeidler/kysely-pglite-dialect/actions/workflows/build.yml/badge.svg)](https://github.com/czeidler/kysely-pglite-dialect/actions/workflows/build.yml)
+[![NPM Version](https://img.shields.io/npm/v/@squelify/kysely-pglite)](https://www.npmjs.com/package/@squelify/kysely-pglite)
+[![Test](https://github.com/squelify/kysely-pglite/actions/workflows/test.yml/badge.svg)](https://github.com/squelify/kysely-pglite/actions/workflows/test.yml)
+[![Build](https://github.com/squelify/kysely-pglite/actions/workflows/build.yml/badge.svg)](https://github.com/squelify/kysely-pglite/actions/workflows/build.yml)
 
 [Kysely](https://github.com/koskimas/kysely) dialect for [PGlite](https://pglite.dev/).
+Forked from [czeidler/kysely-pglite-dialect](https://github.com/czeidler/kysely-pglite-dialect).
 
 ## Setup
 
+### Using `pnpm`
+
 ```bash
-npm i kysely-pglite-dialect kysely @electric-sql/pglite
+pnpm add @squelify/kysely-pglite @electric-sql/pglite kysely
+```
+
+### Using `npm`
+
+```bash
+npm i @squelify/kysely-pglite @electric-sql/pglite kysely
+```
+
+### Using `yarn`
+
+```bash
+yarn add @squelify/kysely-pglite @electric-sql/pglite kysely
 ```
 
 ## Usage
@@ -19,15 +34,18 @@ Init Kysely like:
 ```typescript
 import { Kysely } from "kysely"
 import { PGlite } from "@electric-sql/pglite"
-import { PGliteDialect } from "kysely-pglite-dialect"
+import { PGliteDialect } from "@squelify/kysely-pglite"
 
-const db = new Kysely<{
-  pglite_test_table: { id: Generated<number>; data: string }
-}>({
+interface Database {
+  users: { id: Generated<number>; data: string }
+}
+
+const db = new Kysely<Database>({
   dialect: new PGliteDialect(new PGlite()),
 })
 ```
 
 # Credits
 
-Thanks to [kysely-neon](https://github.com/seveibar/kysely-neon) which was used as a template for this repo.
+Thanks to [czeidler/kysely-pglite-dialect](https://github.com/czeidler/kysely-pglite-dialect) 
+for the original PGlite dialect for Kysely.
