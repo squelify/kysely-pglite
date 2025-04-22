@@ -1,8 +1,8 @@
 module.exports = {
-  files: ["tests/**/*.test.ts"],
-  extensions: ["ts"],
-  require: ["esbuild-register", "./tests/setup.ts"],
+  files: ['tests/**/*.test.ts'],
+  extensions: ['ts'],
+  require: ['esbuild-register', './tests/setup.ts'],
   watchMode: {
-    ignoreChanges: [".next", ".nsm"],
+    ignoreChanges: ['.next', '.nsm'],
   },
 }

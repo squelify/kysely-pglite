@@ -1,6 +1,6 @@
-import { CompiledQuery, DatabaseConnection, QueryResult } from "kysely"
-import { PGlite } from "@electric-sql/pglite"
-import type { PGliteWorker } from "@electric-sql/pglite/worker"
+import { PGlite } from '@electric-sql/pglite'
+import type { PGliteWorker } from '@electric-sql/pglite/worker'
+import { CompiledQuery, DatabaseConnection, QueryResult } from 'kysely'
 
 export class PGliteConnection implements DatabaseConnection {
   private readonly client: PGlite | PGliteWorker
@@ -10,9 +10,7 @@ export class PGliteConnection implements DatabaseConnection {
   }
 
   async executeQuery<O>(compiledQuery: CompiledQuery): Promise<QueryResult<O>> {
-    const result = await this.client.query(compiledQuery.sql, [
-      ...compiledQuery.parameters,
-    ])
+    const result = await this.client.query(compiledQuery.sql, [...compiledQuery.parameters])
 
     if (result.affectedRows) {
       const numAffectedRows = BigInt(result.affectedRows)
@@ -32,6 +30,11 @@ export class PGliteConnection implements DatabaseConnection {
     _compiledQuery: CompiledQuery,
     _chunkSize: number
   ): AsyncIterableIterator<QueryResult<O>> {
-    throw new Error("PGlite Driver does not support streaming")
+    yield {
+      rows: [],
+      numAffectedRows: BigInt(0),
+      numUpdatedOrDeletedRows: BigInt(0),
+    }
+    throw new Error('PGlite Driver does not support streaming')
   }
 }

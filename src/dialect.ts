@@ -1,3 +1,6 @@
+import { PGlite } from '@electric-sql/pglite'
+import type { PGliteWorker } from '@electric-sql/pglite/worker'
+import { PGliteConnection } from 'connection'
 import {
   CompiledQuery,
   DatabaseConnection,
@@ -10,13 +13,10 @@ import {
   PostgresQueryCompiler,
   QueryCompiler,
   TransactionSettings,
-} from "kysely"
-import { PGlite } from "@electric-sql/pglite"
-import type { PGliteWorker } from "@electric-sql/pglite/worker"
-import { PGliteConnection } from "connection"
+} from 'kysely'
 
 export class PGliteDialect implements Dialect {
-  constructor(private readonly pgLite: PGlite | PGliteWorker) { }
+  constructor(private readonly pgLite: PGlite | PGliteWorker) {}
 
   createAdapter() {
     return new PostgresAdapter()
@@ -41,14 +41,14 @@ class PGliteDriver implements Driver {
    * Currently used connection.
    * If another acquireConnection() is called the request is queued till this connection has been released.
    */
-  private connection: PGliteConnection | undefined;
-  private queue: ((con: PGliteConnection) => void)[] = [];
+  private connection: PGliteConnection | undefined
+  private queue: ((con: PGliteConnection) => void)[] = []
 
   constructor(pgLite: PGlite | PGliteWorker) {
     this.client = pgLite
   }
 
-  async init(): Promise<void> { }
+  async init(): Promise<void> {}
 
   // Serialize access to the connection, i.e. promise is only resolved when the last connection was released.
   async acquireConnection(): Promise<DatabaseConnection> {
@@ -57,48 +57,43 @@ class PGliteDriver implements Driver {
     }
     if (this.connection !== undefined) {
       return new Promise((resolve) => {
-        this.queue.push(resolve);
-      });
+        this.queue.push(resolve)
+      })
     }
-    this.connection = new PGliteConnection(this.client);
-    return this.connection;
+    this.connection = new PGliteConnection(this.client)
+    return this.connection
   }
 
   async releaseConnection(connection: PGliteConnection): Promise<void> {
     if (connection !== this.connection) {
-      throw new Error('Invalid connection');
+      throw new Error('Invalid connection')
     }
-    const removed = this.queue.splice(0, 1);
-    const next = removed[0];
+    const removed = this.queue.splice(0, 1)
+    const next = removed[0]
     if (next === undefined) {
-      this.connection = undefined;
-      return;
+      this.connection = undefined
+      return
     }
 
-    next(this.connection);
+    next(this.connection)
   }
 
-  async beginTransaction(
-    conn: PGliteConnection,
-    settings: TransactionSettings
-  ): Promise<void> {
+  async beginTransaction(conn: PGliteConnection, settings: TransactionSettings): Promise<void> {
     if (settings.isolationLevel) {
       await conn.executeQuery(
-        CompiledQuery.raw(
-          `start transaction isolation level ${settings.isolationLevel}`
-        )
+        CompiledQuery.raw(`start transaction isolation level ${settings.isolationLevel}`)
       )
     } else {
-      await conn.executeQuery(CompiledQuery.raw("begin"))
+      await conn.executeQuery(CompiledQuery.raw('begin'))
     }
   }
 
   async commitTransaction(conn: PGliteConnection): Promise<void> {
-    await conn.executeQuery(CompiledQuery.raw("commit"))
+    await conn.executeQuery(CompiledQuery.raw('commit'))
   }
 
   async rollbackTransaction(conn: PGliteConnection): Promise<void> {
-    await conn.executeQuery(CompiledQuery.raw("rollback"))
+    await conn.executeQuery(CompiledQuery.raw('rollback'))
   }
 
   async destroy(): Promise<void> {

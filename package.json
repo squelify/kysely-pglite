@@ -2,43 +2,46 @@
     "name": "@squelify/kysely-pglite",
     "version": "0.1.0",
     "description": "Unofficial Kysely dialect for PGlite",
+    "keywords": ["kysely", "pglite"],
+    "license": "MIT",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsup",
+        "test": "ava",
+        "cleanup": "pnpm dlx rimraf dist node_modules",
+        "format": "biome format . --write",
+        "lint": "biome lint . --write",
+        "check": "biome check . --write",
+        "postinstall": "pnpm approve-builds",
+        "publish:dry": "pnpm publish --dry-run",
+        "prepublishOnly": "pnpm run build",
+        "typecheck": "tsc --noEmit"
+    },
+    "files": ["dist", "README.md"],
     "exports": {
         ".": {
             "import": "./dist/index.mjs",
             "require": "./dist/index.js"
         }
     },
-    "scripts": {
-        "build": "tsup",
-        "typecheck": "tsc --noEmit",
-        "test": "ava"
-    },
-    "files": [
-        "dist",
-        "README.md"
-    ],
-    "keywords": [
-        "kysely",
-        "pglite"
-    ],
-    "author": "",
-    "license": "ISC",
     "devDependencies": {
+        "@biomejs/biome": "^1.9.4",
         "@electric-sql/pglite": "^0.2.0",
-        "esbuild-register": "^3.6.0",
         "@types/node": "^22.14.0",
         "ava": "^6.2.0",
-        "kysely": "^0.27.6",
-        "prettier": "^3.5.3",
-        "typescript": "^5.8.3",
-        "tsup": "^8.4.0"
+        "esbuild-register": "^3.6.0",
+        "kysely": "^0.28.1",
+        "tsup": "^8.4.0",
+        "typescript": "^5.8.3"
     },
     "peerDependencies": {
         "@electric-sql/pglite": "^0.2.0",
         "kysely": "0.x.x"
+    },
+    "publishConfig": {
+        "access": "public"
     },
     "packageManager": "pnpm@10.9.0"
 }
